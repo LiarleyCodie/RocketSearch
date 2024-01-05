@@ -1,5 +1,6 @@
 :root {
   font-size: 62.5%;
+  font-family: 'Roboto', sans-serif;
 }
 
 * {
@@ -16,8 +17,18 @@ a {
   font-size: inherit;
 }
 
+button {
+  cursor: pointer;
+}
+
 body {
   font-size: 1.4rem;
+  background-color: #0c0c0c;
+  background-image: url('https://images.pexels.com/photos/4371631/pexels-photo-4371631.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #fff;
 }
 
 #app {
