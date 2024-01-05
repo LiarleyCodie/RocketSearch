@@ -67,15 +67,15 @@ export const router = express.Router()
 router.get('/api', (req, res) => {
   const { search } = req.query
 
-  if (search.trim() != '') {
+  if (search && search.trim() != '') {
     res.status(200).json({
-      SearchedDataAmount: database.getSearchDataByQuery(search.trim()).length,
-      SearchedData: database.getSearchDataByQuery(search.trim()),
+      searched_data_amount: database.getSearchDataByQuery(search.trim()).length,
+      searched_data: database.getSearchDataByQuery(search.trim()),
     })
   } else {
     res.status(200).json({
-      DataAmount: database.getManySearchData().length,
-      Data: database.getManySearchData(),
+      data_amount: database.getManySearchData().length,
+      data: database.getManySearchData(),
     })
   }
 })

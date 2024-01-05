@@ -5,7 +5,7 @@
 
 <main class="main">
   <header class="header">
-    <a href="#">
+    <a href="https://www.rocketseat.com.br/">
       <img
         src={RocketseatPlusLogo}
         alt="Rocketseat Rocket with boost (plus icon)"
@@ -46,5 +46,15 @@
     user-select: none;
     pointer-events: none;
     align-self: end;
+  }
+
+  @media screen and (max-width: 640px) {
+    .main {
+      padding-inline: 1.2rem;
+    }
+
+    .main header {
+      padding-inline: 4rem;
+    }
   }
 </style>

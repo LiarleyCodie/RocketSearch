@@ -1,6 +1,43 @@
 <script>
   import Icon from '@iconify/svelte'
+  import axios from 'axios'
+
   let suggestionsVisible = true
+
+  let searchValue = 'Onde encontrar as ediçoes passadas do NLW?'
+
+  /**
+   * @typedef {Object} Datas
+   * @property {number} searched_data_amount
+   * @property {Data[]} searched_data
+   *
+   * @typedef {Object} Data
+   * @property {string} id
+   * @property {string} title
+   * @property {string} description
+   * @property {string} url
+   */
+  /** @type{Datas} */
+  let searchData = {
+    searched_data: [],
+    searched_data_amount: 0,
+  }
+
+  const toggleSuggestionsTray = () => {
+    if (searchData.searched_data_amount) suggestionsVisible = true
+    else suggestionsVisible = false
+  }
+
+  const handleInput = async () => {
+    await axios
+      .get(`/api?search=${searchValue.trim()}`)
+      .then(({ data }) => {
+        searchData = data
+
+        toggleSuggestionsTray()
+      })
+      .catch((err) => console.error(err))
+  }
 </script>
 
 <div class="searchbar-wrapper" data-suggestionsvisibility={suggestionsVisible}>
@@ -9,11 +46,12 @@
     <button type="submit">
       <span class="icon search-icon"><Icon icon="tabler:search" /></span>
     </button>
-
     <input
+      on:keyup={handleInput}
+      on:search={toggleSuggestionsTray}
       type="search"
       name="search"
-      value="Onde encontrar as ediçoes passadas do NLW?"
+      bind:value={searchValue}
     />
 
     <button>
@@ -46,6 +84,12 @@
           <a href="#">
             <span class="icon search-icon"><Icon icon="tabler:search" /></span>
             Todas as NLW</a
+          >
+        </li>
+        <li>
+          <a href="#">
+            <span class="icon search-icon"><Icon icon="tabler:search" /></span>
+            Paçoca</a
           >
         </li>
       </ul>
@@ -100,8 +144,6 @@
     display: flex;
     align-items: center;
     padding: 1.2rem;
-    transition-property: backdrop-filter, background-color, border-color;
-    transition-duration: 200ms;
     border-left: 1px solid rgba(255, 255, 255, 0.4);
     border-right: 1px solid rgba(255, 255, 255, 0.4);
   }
@@ -121,11 +163,11 @@
   .searchsuggestions ul li a .icon {
     display: flex;
     font-size: 2.4rem;
-    margin-right: 1.6rem;
+    margin-inline: 0.2rem 1.4rem;
     color: #626365;
   }
 
-  /* Sarch input */
+  /* Search input */
   .searchbar-wrapper .searchbar {
     display: flex;
     width: 100%;
@@ -143,10 +185,6 @@
     );
 
     backdrop-filter: blur(0.25rem);
-
-    transition-property: background-position, background-size, border-color,
-      backdrop-filter, box-shadow;
-    transition-duration: 200ms;
 
     overflow: hidden;
     position: relative;
@@ -171,8 +209,8 @@
   .searchbar-wrapper .searchbar:focus-within {
     border-color: white;
 
-    background: rgb(107, 107, 107);
-    background: linear-gradient(
+    background-color: rgba(0, 0, 0, 0.1);
+    background-image: linear-gradient(
       45deg,
       rgba(107, 107, 107, 0.06206232492997199) 43%,
       rgba(255, 184, 129, 0.19) 53%,
