@@ -1,6 +1,8 @@
 :root {
   font-size: 62.5%;
   font-family: 'Roboto', sans-serif;
+
+  --image-url: url('https://images.pexels.com/photos/17867905/pexels-photo-17867905/free-photo-of-vrouw-eten-staand-appels.jpeg?auto=compress&cs=tinysrgb&w=1920&h=2880&dpr=1');
 }
 
 * {
@@ -24,7 +26,7 @@ button {
 body {
   font-size: 1.4rem;
   background-color: #0c0c0c;
-  background-image: url('https://images.pexels.com/photos/4371631/pexels-photo-4371631.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1');
+  background-image: var(--image-url);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
