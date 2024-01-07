@@ -65,9 +65,15 @@ export const database = new StaticDatabase()
 export const router = express.Router()
 
 router.get('/api', (req, res) => {
-  const { search } = req.query
+  const { search, length } = req.query
 
-  if (search && search.trim() != '') {
+  if (search && search.trim() != '' && length) {
+    res.status(200).json({
+      searched_data_amount: database.getSearchDataByQuery(search.trim(), length)
+        .length,
+      searched_data: database.getSearchDataByQuery(search.trim(), length),
+    })
+  } else if (search && search.trim() != '') {
     res.status(200).json({
       searched_data_amount: database.getSearchDataByQuery(search.trim()).length,
       searched_data: database.getSearchDataByQuery(search.trim()),

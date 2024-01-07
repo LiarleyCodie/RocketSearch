@@ -2,9 +2,15 @@
   import Icon from '@iconify/svelte'
   import axios from 'axios'
 
-  let suggestionsVisible = true
+  let suggestionsVisible = false
 
-  let searchValue = 'Onde encontrar as ediçoes passadas do NLW?'
+  let searchValue = ''
+
+  /**
+   * @param {string} text
+   * @returns {string}
+   */
+  const accentsRemover = (text) => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
 
   /**
    * @typedef {Object} Datas
@@ -14,6 +20,7 @@
    * @typedef {Object} Data
    * @property {string} id
    * @property {string} title
+   * @property {string} localizableTitle
    * @property {string} description
    * @property {string} url
    */
@@ -30,10 +37,11 @@
 
   const handleInput = async () => {
     await axios
-      .get(`/api?search=${searchValue.trim()}`)
+      .get(`/api?search=${searchValue.trim()}&length=5`)
       .then(({ data }) => {
         searchData = data
 
+        console.log(searchData)
         toggleSuggestionsTray()
       })
       .catch((err) => console.error(err))
@@ -48,7 +56,6 @@
     </button>
     <input
       on:keyup={handleInput}
-      on:search={toggleSuggestionsTray}
       type="search"
       name="search"
       bind:value={searchValue}
@@ -62,36 +69,14 @@
   {#if suggestionsVisible}
     <div class="searchsuggestions active">
       <ul>
+       {#each searchData.searched_data as data}
         <li>
-          <a href="#">
+          <a href="{data.url}">
             <span class="icon search-icon"><Icon icon="tabler:search" /></span>
-            NLW onde assistir</a
-          >
+            {data.title}
+          </a>
         </li>
-        <li>
-          <a href="#">
-            <span class="icon search-icon"><Icon icon="tabler:search" /></span>
-            projetos NLW para codar</a
-          >
-        </li>
-        <li>
-          <a href="#">
-            <span class="icon search-icon"><Icon icon="tabler:search" /></span>
-            NLW rocketseat</a
-          >
-        </li>
-        <li>
-          <a href="#">
-            <span class="icon search-icon"><Icon icon="tabler:search" /></span>
-            Todas as NLW</a
-          >
-        </li>
-        <li>
-          <a href="#">
-            <span class="icon search-icon"><Icon icon="tabler:search" /></span>
-            Paçoca</a
-          >
-        </li>
+       {/each}
       </ul>
     </div>
   {/if}
@@ -242,6 +227,22 @@
     padding: 0.8rem;
     flex: 1;
     outline: none;
+  }
+
+  /* clears the 'X' from IE */
+  .searchbar-wrapper input[type='search']::-ms-clear,
+  .searchbar-wrapper input[type='search']::-ms-reveal {
+    display: none;
+    width: 0;
+    height: 0;
+  }
+
+  /* clears the 'X' from Chrome */
+  .searchbar-wrapper input[type='search']::-webkit-search-decoration,
+  .searchbar-wrapper input[type='search']::-webkit-search-cancel-button,
+  .searchbar-wrapper input[type='search']::-webkit-search-results-button,
+  .searchbar-wrapper input[type='search']::-webkit-search-results-decoration {
+    display: none;
   }
 
   .searchbar-wrapper button {
