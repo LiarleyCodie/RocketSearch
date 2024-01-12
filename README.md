@@ -11,16 +11,15 @@ run with:
 > pnpm dev
 
 Technologies used:
-Client:
 
+(Client):
 - `Svelte`
 - `Svelte-routing`
 - `Iconify`
 - `Vite`
 - `Axios`
 
-Server:
-
+(Server):
 - `NodeJS`
 - `Express`
 - `Cors`
