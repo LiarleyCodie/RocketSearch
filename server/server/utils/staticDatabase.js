@@ -1,6 +1,19 @@
 import { randomUUID } from 'node:crypto'
 
 /**
+ * @param {any[]} array
+ * @returns {any[]}
+ * */
+let shuffleArray = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
+  }
+
+  return array
+}
+
+/**
  * @param {string} text
  * @returns {string}
  */
@@ -52,27 +65,18 @@ export class StaticDatabase {
    * @returns {Data}
    */
   getSearchDataByQuery(searchQuery, length) {
-    let _data = []
-    let _slicedData = []
+    // Algorithm improved with the help of my dear friend Éllie (or ChatGPT)
+    const keywords = searchQuery.trim().toLowerCase().split(/\s+/)
 
-    if (searchQuery && searchQuery != '') {
-      _data = this.getManySearchData().filter((data) =>
-        data.title.toUpperCase().includes(searchQuery.toUpperCase())
+    let filteredData = this.getManySearchData().filter((data) => {
+      return keywords.some((keyword) =>
+        data.localizableTitle.toLowerCase().includes(keyword)
       )
-    }
+    })
 
-    if (length && _data.length > length) {
-      const startId = Math.floor(Math.random() * _data.length)
-      let currentId = startId
-      for (let i = 0; i < length; i++) {
-        if (currentId + 1 > length) currentId = 0
-        _slicedData[i] = _data[currentId]
-        currentId++
-      }
-      return _slicedData
-    }
+    filteredData = shuffleArray(filteredData)
 
-    return _data
+    return length ? filteredData.slice(0, length) : filteredData
   }
 
   /**

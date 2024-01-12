@@ -35,16 +35,26 @@
     else suggestionsVisible = false
   }
 
-  const handleInput = async () => {
-    await axios
-      .get(`/api?search=${searchValue.trim()}&length=5`)
+  /** @param {KeyboardEvent} e */
+  const handleInput = async (e) => {
+    const { key } = e
+    
+    const allowedKeys = [
+      'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
+      'O','P','Q','R','S','T','U','V','W','X','Y','Z','0','1',
+      '2','3','4','5','6','7','8','9', 'BACKSPACE'
+    ]
+
+    if (allowedKeys.includes(key.toUpperCase())) {
+      await axios
+      .get(`/api?search=${accentsRemover(searchValue.trim())}&length=5`)
       .then(({ data }) => {
         searchData = data
 
-        console.log(searchData)
         toggleSuggestionsTray()
       })
       .catch((err) => console.error(err))
+    }
   }
 </script>
 
