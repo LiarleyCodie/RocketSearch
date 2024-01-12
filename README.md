@@ -6,7 +6,8 @@ and I liked it so much that I decided to try to bring it to life.
 Install with:
 
 > pnpm install
-> run with:
+
+run with:
 > pnpm dev
 
 Technologies used:
